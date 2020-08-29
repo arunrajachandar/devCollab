@@ -3,24 +3,37 @@
   "version": "1.0.0",
   "description": "Social Networking For Devs",
   "main": "server.js",
+    "jest": {
+      "testEnvironment": "node"
+    }
+    ,
   "scripts": {
     "start": "node server",
-    "server": "nodemon server"
+    "server": "env NODE_ENV=production && nodemon server",
+    "test": "jest --runInBand --detectOpenHandles",
+    "test:watch": "jest --watch  --runInBand --detectOpenHandles"
   },
   "author": "Arun Rajachandar R",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chai": "^4.2.0",
     "config": "^3.3.1",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
     "gravatar": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^8.1.1",
     "mongoose": "^5.10.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "superagent": "^6.0.0",
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
+    "fetch": "^1.1.0",
+    "jest": "^26.4.2",
+    "node-fetch": "^2.6.0",
     "nodemon": "^2.0.4"
   }
 }
