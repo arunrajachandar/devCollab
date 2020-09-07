@@ -8,7 +8,7 @@ export const getPosts = () => async dispatch => {
         type: actionTypes.LOAD_POSTS
     })
     try {
-        const res = await axios.get('http://localhost:5000/apis/posts/');
+        const res = await axios.get('/apis/posts/');
 
         dispatch({
             type: actionTypes.GET_POSTS,
@@ -39,7 +39,7 @@ export const createPosts = (text) => async dispatch => {
         type: actionTypes.LOAD_POSTS
     })
     try {
-        const res = await axios.post('http://localhost:5000/apis/posts/', body, config);
+        const res = await axios.post('/apis/posts/', body, config);
         dispatch({
             type: actionTypes.CREATE_POST,
             payload: res.data
@@ -70,7 +70,7 @@ export const postComment = (text, postId) => async dispatch => {
         type: actionTypes.LOAD_POSTS
     })
     try {
-        const res = await axios.post(`http://localhost:5000/apis/posts/${postId}/comments`, body, config);
+        const res = await axios.post(`/apis/posts/${postId}/comments`, body, config);
         dispatch({
             type: actionTypes.POST_COMMENT,
             payload: res.data
@@ -91,9 +91,9 @@ export const postComment = (text, postId) => async dispatch => {
 export const clearPosts = () => async dispatch => dispatch({ type: actionTypes.CLEAR_POSTS });
 
 export const likeOrUnlikePost = ( postId, like = true) => async dispatch =>{
-let url = 'http://localhost:5000/apis/posts/'+postId+'/likes/';
+let url = '/apis/posts/'+postId+'/likes/';
 if(!like){
-   url = 'http://localhost:5000/apis/posts/'+postId+'/unlikes/'
+   url = '/apis/posts/'+postId+'/unlikes/'
 }
 
     try {
@@ -116,7 +116,7 @@ if(!like){
 }
 
 export const deletePost = ( postId) => async dispatch =>{
-    let url = 'http://localhost:5000/apis/posts/'+postId;
+    let url = '/apis/posts/'+postId;
     
         try {
                 const res = await axios.delete(url);
@@ -143,7 +143,7 @@ export const deletePost = ( postId) => async dispatch =>{
             type: actionTypes.LOAD_POSTS
         })
         try {
-            const res = await axios.get('http://localhost:5000/apis/posts/'+postId);
+            const res = await axios.get('/apis/posts/'+postId);
     
             dispatch({
                 type: actionTypes.GET_POST,
@@ -163,7 +163,7 @@ export const deletePost = ( postId) => async dispatch =>{
     }
 
     export const deleteComment = ( postId, commentId) => async dispatch =>{
-        let url = 'http://localhost:5000/apis/posts/'+postId+'/comments/'+commentId;
+        let url = '/apis/posts/'+postId+'/comments/'+commentId;
         
             try {
                     const res = await axios.delete(url);
