@@ -1,0 +1,7 @@
+{
+    "prodMongoURI":"mongodb+srv://arraj10:arraj10_123@devconnector.uafw8.mongodb.net/DevConnector?retryWrites=true&w=majority",
+    "testMongoURI":"mongodb+srv://testDevConnector:testDevConnector@testdevconnector.xbbkg.mongodb.net/testDb?retryWrites=true&w=majority",
+    "jwtSecret":"mysecret",
+    "gitClientId": "0224d7aa5dcb122a487e",
+    "gitClientSecret": "c99a61901a6690f6fd331456c558c85d0bf8c070"
+}

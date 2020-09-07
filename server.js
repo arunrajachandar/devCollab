@@ -7,6 +7,7 @@ const usersRouter = require('./routes/apis/users');
 const { connect } = require('mongoose');
 const app = express();
 const cors = require('cors');
+const path = reqquire('path');
 
 app.use(cors());
 
@@ -27,7 +28,15 @@ app.use('/apis/posts', postsRouter);
 app.use('/apis/profile', profileRouter);
 app.use('/apis/users', usersRouter);
 
-app.listen(PORT,()=>{
+
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static('client/build'));
+    app.get('*', (req,res)=>{
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
+
+app.listen(PORT,()=>
     console.log('Running')
 })
 
