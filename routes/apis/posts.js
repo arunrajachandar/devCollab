@@ -87,13 +87,13 @@ postsRouter.get('/', auth, async (req,res)=> {
     try{
         const posts = await Posts.find({}).sort({ 'postedOn': -1})
         if(posts.length === 0){
-            return res.status(404).json({
+            return res.status(404).json({errors: [{
                 msg: 'No posts found yet'
-            })
-        }
+            }]
+        })
+    }
         res.json(posts)
     }catch(error){
-        console.error(error.message);
         res.status(500).json({
             errors:[
                 {
@@ -180,19 +180,28 @@ postsRouter.put('/:id/likes', auth, async (req,res)=> {
         }
 
         const findUser = post.likes.filter(likedUser => likedUser.user.toString() === req.user.id)
-        console.log(findUser)
-
-        
 
         if(!findUser.length){
+            post = await Posts.findOneAndUpdate({_id:req.params.id},{
+                $pull:{
+                    unlikes:{
+                        name: user.name,
+                        avatar: user.avatar,
+                        user: user.id
+                    }    
+                }
+            },{
+                new: true,
+                multi: true
+            })
             post.likes.unshift(
                 {
                     name: user.name,
                     avatar: user.avatar,
                     user: user.id
                 })
+        
         }else{
-            console.log('Update')
             post = await Posts.findOneAndUpdate({_id:req.params.id},{
                 $pull:{
                     likes:{
@@ -211,6 +220,8 @@ postsRouter.put('/:id/likes', auth, async (req,res)=> {
         }
 
         await post.save();        
+
+
         res.json(post)
 
     }catch(error){
@@ -229,6 +240,83 @@ postsRouter.put('/:id/likes', auth, async (req,res)=> {
     }
 
 })
+
+//@route: PUT api/posts/:id/likes
+//@desc:  Like post
+//@access: Private
+
+postsRouter.put('/:id/unlikes', auth, async (req,res)=> {
+    try{
+
+        let post = await Posts.findOne({_id: req.params.id})
+        const user = await User.findById(req.user.id)
+        if(!post){
+            return res.status(404).json({msg: 'No post found'})
+        }
+
+        const findUser = post.unlikes.filter(likedUser => likedUser.user.toString() === req.user.id)
+        if(!findUser.length){
+            post = await Posts.findOneAndUpdate({_id:req.params.id},{
+                $pull:{
+                    likes:{
+                        name: user.name,
+                        avatar: user.avatar,
+                        user: user.id
+                    }    
+                }
+            }
+            ,{
+                new: true,
+                multi: true
+            })
+            post.unlikes.unshift(
+                {
+                    name: user.name,
+                    avatar: user.avatar,
+                    user: user.id
+                })
+            
+
+        }else{
+            post = await Posts.findOneAndUpdate({_id:req.params.id},{
+                $pull:{
+                    unlikes:{
+                        name: user.name,
+                        avatar: user.avatar,
+                        user: user.id
+                    }    
+                }
+            },{
+                new: true,
+                multi: true
+            })
+    
+    
+        
+        }
+
+        await post.save();        
+
+
+        res.json(post)
+
+    }catch(error){
+        console.error(error.message);
+        if(error.kind === 'ObjectId'){
+            return res.status(404).json({msg: 'No post found'})
+        }
+
+        res.status(500).json({
+            errors:[
+                {
+                    msg: 'Server Error'
+                }
+            ]
+        })
+    }
+
+})
+
 
 
 //@route: POST api/posts/:id/comments
@@ -294,7 +382,6 @@ postsRouter.put('/:post_id/comments/:comment_id', auth, async (req,res)=> {
         let post = await Posts.findById(req.params.post_id)
         const user = await User.findById(req.user.id)
         const findComment = post.comments.filter(comment => comment._id.toString() === req.params.comment_id)
-        console.log(findComment)
 
         if(!post || findComment.length === 0){
             return res.status(404).json({msg: 'No comment found'})
@@ -304,7 +391,6 @@ postsRouter.put('/:post_id/comments/:comment_id', auth, async (req,res)=> {
         const { text } = req.body;  
 
         if(text){
-            console.log('Inside if')
         post = await Posts.findOneAndUpdate({_id:req.params.post_id},{
             $set:{
                 comments:{
@@ -329,7 +415,6 @@ postsRouter.put('/:post_id/comments/:comment_id', auth, async (req,res)=> {
         res.json(post)
 
     }catch(error){
-        console.error(error.message);
         if(error.kind === 'ObjectId'){
             return res.status(404).json({msg: 'No post found'})
         }

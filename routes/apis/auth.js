@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const {body, validationResult } = require('express-validator');
 
-//@route: get api/auth
+//@route: get apis/auth
 //@desc:  Authentication Purposes
 //@access: Private
 
@@ -49,7 +49,6 @@ authRouter.post('/',[
             const signUser = await User.findOne({
                 email 
             })    
-            console.log(signUser)
             if(!signUser){
                 res.status(400).send({
                     errors:[

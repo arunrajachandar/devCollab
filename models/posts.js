@@ -29,6 +29,20 @@ const postsSchema = new mongoose.Schema({
             }
         }
     ],
+    unlikes:[
+        {
+            user:{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'users'
+            },
+            name:{
+                type: String
+            },
+            avatar:{
+                type: String
+            }
+        }
+    ],
     comments:[
         {
             user:{
@@ -47,7 +61,35 @@ const postsSchema = new mongoose.Schema({
             commentedOn:{
                 type: Date,
                 default: Date.now
-            }
+            },
+            likes:[
+                {
+                    user:{
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'users'
+                    },
+                    name:{
+                        type: String
+                    },
+                    avatar:{
+                        type: String
+                    }
+                }
+            ],
+            unlikes:[
+                {
+                    user:{
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'users'
+                    },
+                    name:{
+                        type: String
+                    },
+                    avatar:{
+                        type: String
+                    }
+                }
+            ]
         }
     ],
     postedOn:{

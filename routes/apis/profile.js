@@ -17,7 +17,8 @@ profileRouter.get('/all', async (req,res)=> {
     try{
         const profiles = await Profile.find().populate('user',
         ['name','avatar'])
-        res.status(200).json({profiles})       
+        console.log('Response done')
+        res.status(200).json({data: profiles})       
 
     }catch(error){
         return res.status(500).json({
@@ -48,7 +49,7 @@ profileRouter.get('/me', auth, async (req,res)=> {
                 ]
             })
         } 
-        res.status(200).json({profile})       
+        res.status(200).json({data: profile})       
 
     }catch(error){
         return res.status(500).json({
@@ -65,7 +66,7 @@ profileRouter.get('/me', auth, async (req,res)=> {
 //@access: Private
 
 
-profileRouter.get('/user/:user_id', auth, async (req,res)=> {
+profileRouter.get('/user/:user_id', async (req,res)=> {
     console.log(req.params)
     try{
         const profile = await Profile.findOne({user: req.params.user_id}).populate(
@@ -81,7 +82,7 @@ profileRouter.get('/user/:user_id', auth, async (req,res)=> {
                 ]
             })
         } 
-        res.status(200).json({profile})       
+        res.status(200).json({data: profile})       
 
     }catch(error){
         return res.status(500).json({
@@ -166,7 +167,6 @@ profileRouter.post('/',[
          if(instagram) profileFields.socials.instagram = instagram
          if(youtube) profileFields.socials.youtube = youtube
          if(linkedIn) profileFields.socials.linkedIn = linkedIn
-         console.log(profileFields)
          profileFields.user = req.user.id
 
     try{            
@@ -177,12 +177,11 @@ profileRouter.post('/',[
             },{
                 new: true
             })
-            return res.json({profile})
+            return res.json({data: profile})
         }
         profile = new Profile(profileFields);
         await profile.save()
-        console.log(profile)
-        res.json({profile})
+        res.json({data: profile})
     }catch(err){
         console.error(err.message)
         res.status(500).send({
@@ -242,7 +241,7 @@ profileRouter.put('/experience',[
         // console.log(experience)
         profile.experience.unshift(newExp)
         await profile.save()
-        res.json({profile})
+        res.json({data: profile})
     }catch(err){
         console.error(err)
         res.status(500).send({
@@ -271,9 +270,7 @@ profileRouter.delete('/experience/:exp_id', auth, async (req,res)=> {
         profile.experience.splice(removeId, 1)
         await profile.save()
 
-        res.json({
-            msg: 'Experience Removed'
-        })
+        res.json({data: profile})
     }catch(error){
         return res.status(500).json({
             errors:[{
@@ -291,7 +288,8 @@ profileRouter.put('/education',[
     auth,
     body('school').not().isEmpty().withMessage('School Name Required'),
     body('degree').not().isEmpty().withMessage('Degree required'),
-    body('specialization').not().isEmpty().withMessage('Specialization required')
+    body('specialization').not().isEmpty().withMessage('Specialization required'),
+    body('from').not().isEmpty().withMessage('From date required')
 ],async (req,res)=>{
 
         const error = await validationResult(req);
@@ -327,7 +325,7 @@ profileRouter.put('/education',[
         // console.log(experience)
         profile.education.unshift(newExp)
         await profile.save()
-        res.json({profile})
+        res.json({data: profile})
     }catch(err){
         console.error(err)
         res.status(500).send({
@@ -357,7 +355,7 @@ profileRouter.delete('/education/:edu_id', auth, async (req,res)=> {
         await profile.save()
 
         res.json({
-            msg: 'Education Removed'
+            data: profile
         })
     }catch(error){
         return res.status(500).json({

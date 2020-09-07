@@ -9,9 +9,7 @@ const connectProdDB = async () => {
             useUnifiedTopology: true,
         useCreateIndex: true,
     useFindAndModify: false})
-        console.log('DB connected')
     }catch(err){
-        console.log(err)
         process.exit(1)
     }
 }
@@ -22,9 +20,7 @@ const connectTestDB =  async () => {
             useUnifiedTopology: true,
         useCreateIndex: true,
     useFindAndModify: false})
-        console.log('TestDB connected')
     }catch(err){
-        console.log(err)
         process.exit(1)
     }
 }

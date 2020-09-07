@@ -4,7 +4,9 @@ const config = require('config');
 module.exports = function(req, res, next){
     const token = req.header('x-auth-token')
     if(!token){
-        return res.status(401).json({msg: 'No token found. Not authorised'})
+        return res.status(401).json({errors:
+            [{msg: 'No token found. Not authorised'}]
+        })
     }
 
     try{
@@ -12,7 +14,7 @@ module.exports = function(req, res, next){
         req.user = verifyToken.user;
         next()
     }catch(error){
-       return res.status(401).json({msg: 'Token not valid'})
+       return res.status(401).json({errors: [{msg: 'Token not valid'}]})
     }
 
 }
