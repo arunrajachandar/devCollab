@@ -14,7 +14,18 @@ app.use(cors());
 
 app.use(express.json({extended: false}))
 
-
+app.use((req, res, next) => {
+    res.header(
+      "Access-Control-Allow-Origin",
+      "https://sleepy-headland-87335.herokuapp.com/"
+    );
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+  });
+  
 
 
 const PORT = process.env.PORT||5000;
