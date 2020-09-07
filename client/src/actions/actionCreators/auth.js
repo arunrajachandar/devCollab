@@ -79,9 +79,9 @@ export const signIn = (password, email) => async dispatch => {
         dispatch(loadUser())
     } catch (error) {
         const errors = error.response;
-        if(errors){
-            errors.data.errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
-        }
+        // if(errors){
+        //     errors.data.errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
+        // }
         dispatch({
             type: actionTypes.LOGIN_FAILED
         })

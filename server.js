@@ -8,10 +8,12 @@ const { connect } = require('mongoose');
 const app = express();
 const cors = require('cors');
 const path = require('path');
+// const { createProxyMiddleware } = require('http-proxy-middleware');
 
 app.use(cors());
 
 app.use(express.json({extended: false}))
+
 
 
 
@@ -36,8 +38,15 @@ if(process.env.NODE_ENV === 'production'){
     })
 }
 
-app.listen(PORT,()=>{
-    console.log('Running')
-})
+app.listen(PORT)
 
 module.exports = app;
+// module.exports = function(app) {
+//     app.use(
+//       '/api',
+//       createProxyMiddleware({
+//         target: 'http://localhost:5000',
+//         changeOrigin: true,
+//       })
+//     );
+//   };

@@ -19,9 +19,9 @@ authRouter.get('/', auth, async(req,res)=> {
     }
     catch(err){
         res.status(500).send({
-            errors:{
+            errors:[{
                 msg: 'Server Error'
-            }
+            }]
         })
     }
 
